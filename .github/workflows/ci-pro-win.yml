@@ -10,7 +10,7 @@ env:
 
 jobs:
   build:
-    if: contains('["xlc520"]', github.actor)
+    # if: contains('["xlc520"]', github.actor)
     permissions:
       contents: write
     runs-on: ${{ matrix.os }}

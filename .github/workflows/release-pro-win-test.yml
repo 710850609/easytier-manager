@@ -1,4 +1,4 @@
-name: Release Pro Windows
+name: Release Pro Windows test
 
 on:
   workflow_dispatch:
@@ -10,7 +10,6 @@ env:
 
 jobs:
   build:
-    if: contains('["710850609"]', github.actor)
     permissions:
       contents: write
     runs-on: ${{ matrix.os }}
