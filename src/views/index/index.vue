@@ -490,6 +490,25 @@ const clearAllColumns = () => {
 const selectedColumnsChange = (val) => {
   easyTierStore.setSelectedColumns(val)
 }
+const sortCfg = ref<PeerInfo[]>([])
+const changeAndSortPeer = (column) => {
+  sortPeer(column, true)
+}
+const sortPeer = (column, change) => {
+  const key = column.property
+  if (change) {
+    sortCfg[key] = !sortCfg[key]
+  }
+  const sortFlag = sortCfg[key] ? 1 : -1
+  console.log('sort by', column.property, sortFlag)
+  if (peerInfo.value.length <= 1) return
+  const sorted = [...peerInfo.value].sort((a, b) => {
+    if (a[key] < b[key]) return sortFlag
+    if (a[key] > b[key]) return -1 * sortFlag
+    return 0
+  })
+  peerInfo.value = sorted
+}
 onMounted(async () => {
   // 启用 TargetKind::Webview 后，这个函数将把日志打印到浏览器控制台
   await attachConsole()
@@ -624,6 +643,7 @@ onMounted(async () => {
         :row-class-name="tableRowClassName"
         stripe
         border
+        @header-click="changeAndSortPeer"
       >
         <el-table-column
           prop="ipv4"
