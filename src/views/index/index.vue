@@ -297,6 +297,7 @@ const getPeerInfo = async () => {
       value.nat_type = getNatType(value.nat_type)
       value.delayColor = getDelayColor(value.lat_ms)
     })
+    sortPeer()
     runningTag2.value = true
     if (
       easyTierStore.p2pNotify &&
@@ -490,17 +491,20 @@ const clearAllColumns = () => {
 const selectedColumnsChange = (val) => {
   easyTierStore.setSelectedColumns(val)
 }
-const sortCfg = ref<PeerInfo[]>([])
+var sortCfg = { property: '', asc: true }
 const changeAndSortPeer = (column) => {
-  sortPeer(column, true)
-}
-const sortPeer = (column, change) => {
-  const key = column.property
-  if (change) {
-    sortCfg[key] = !sortCfg[key]
+  if (sortCfg.property == column.property) {
+    sortCfg.asc = !sortCfg.asc
+  } else {
+    sortCfg.property = column.property
+    sortCfg.asc = true
   }
-  const sortFlag = sortCfg[key] ? 1 : -1
-  console.log('sort by', column.property, sortFlag)
+  sortPeer()
+}
+const sortPeer = () => {
+  const key = sortCfg.property
+  if (!key) return
+  const sortFlag = sortCfg.asc ? 1 : -1
   if (peerInfo.value.length <= 1) return
   const sorted = [...peerInfo.value].sort((a, b) => {
     if (a[key] < b[key]) return sortFlag
