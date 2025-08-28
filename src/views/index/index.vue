@@ -491,7 +491,7 @@ const clearAllColumns = () => {
 const selectedColumnsChange = (val) => {
   easyTierStore.setSelectedColumns(val)
 }
-let sortCfg = { property: '', asc: true }
+const sortCfg = { property: '', asc: true }
 const changeAndSortPeer = (column) => {
   if (sortCfg.property == column.property) {
     sortCfg.asc = !sortCfg.asc
